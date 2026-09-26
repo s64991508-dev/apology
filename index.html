@@ -8,12 +8,6 @@
 <meta name="description" content="A sorry letter, a promise of 15 days, and a question only she can answer." />
 <style>
 /* ============================================================
-   FONTS — embedded as data URIs so the handwriting shows on every
-   device (phone, laptop, offline) instead of falling back to Times.
-   ============================================================ */
-/*FONTS*/
-
-/* ============================================================
    0 · FOUNDATION
    ============================================================ */
 :root{
@@ -75,7 +69,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   50%    { transform:translate3d(-1.4%,1%,0) scale(1.05); }
 }
 
-/* the pearl necklace from the photo */
+/* pearl necklace */
 .pearls{ position:fixed; left:max(10px,3vw); top:11vh; z-index:1; display:flex; flex-direction:column; gap:9px; pointer-events:none; animation:pearlSway 10s ease-in-out infinite; }
 .pearls i{ width:15px; height:15px; border-radius:50%;
   background:radial-gradient(circle at 32% 28%, #fff 0 14%, #f6f3ed 36%, #ded8cd 64%, #c2bcb0 100%);
@@ -83,7 +77,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 @keyframes pearlSway{ 0%,100%{ transform:rotate(-6deg);} 50%{ transform:rotate(-3.5deg) translateY(9px);} }
 
 /* ============================================================
-   1 · SCENE ARCHITECTURE  (gentle cross-fade, no stacking bugs)
+   1 · SCENE ARCHITECTURE
    ============================================================ */
 .scene{
   position:fixed; inset:0; z-index:3;
@@ -162,7 +156,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 .whisper{ font-size:clamp(16px,4.2vw,21px); color:#42608f; opacity:.92; }
 
 /* ============================================================
-   4 · SCENE 2 — THE TWO LETTERS + THE OLD WAX SEAL
+   4 · SCENE 2 — THE TWO LETTERS
    ============================================================ */
 .hint{
   font-family:var(--script); font-size:clamp(20px,5.6vw,30px); color:#3f5d8c;
@@ -183,7 +177,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 .letter-back .lb-title{ font-family:var(--script); font-size:1.5em; color:var(--ink); margin-bottom:.35em; }
 .letter-back.l2{ transform:rotate(-12deg) translate(-17%,9%); opacity:.88; }
 .letter-back.l1{ transform:rotate(9deg) translate(17%,-3%); }
-.letter-back.l1::after{ /* a tiny wax dot, so it reads as a sealed keepsake */
+.letter-back.l1::after{
   content:""; position:absolute; right:10px; bottom:10px; width:16px; height:16px; border-radius:50%;
   background:radial-gradient(circle at 35% 30%, #c3384a, #7d1524 70%);
   box-shadow:0 2px 4px rgba(60,16,24,.4);
@@ -197,13 +191,12 @@ button{ font-family:inherit; touch-action:manipulation; }
   animation:floaty 6.5s ease-in-out infinite;
 }
 @keyframes floaty{ 0%,100%{ transform:rotate(-2deg) translateY(0); } 50%{ transform:rotate(1.6deg) translateY(-10px); } }
-.envelope::before{ /* flap */
+.envelope::before{
   content:""; position:absolute; inset:0; border-radius:10px 10px 0 0;
   background:linear-gradient(178deg,#f8eed9 0%,#f1e3c8 62%,rgba(232,216,187,0) 100%);
   clip-path:polygon(0 0, 100% 0, 50% 56%);
   box-shadow:inset 0 -1px 0 rgba(178,138,63,.25);
 }
-.envelope::after{ border-top:1px solid rgba(178,138,63,.16); }
 
 .seal{
   position:absolute; left:50%; top:52%; translate:-50% -50%; z-index:4;
@@ -238,16 +231,14 @@ button{ font-family:inherit; touch-action:manipulation; }
 .seal.opened ~ .seal-hint{ opacity:0; transition:opacity .3s; }
 
 /* ============================================================
-   5 · SCENE 3 — THE LETTER (torn paper, like the photograph)
+   5 · SCENE 3 — THE LETTER
    ============================================================ */
 .letter-wrap{ display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.2vh,20px); width:100%; }
 
 .letter{
-  --mask: __MASK__;
   position:relative;
   width:min(620px,95vw);
-  -webkit-mask-image:var(--mask); -webkit-mask-size:100% 100%; -webkit-mask-repeat:no-repeat;
-  mask-image:var(--mask); mask-size:100% 100%; mask-repeat:no-repeat;
+  border-radius:12px;
   filter:drop-shadow(0 26px 34px rgba(36,58,98,.34));
   background:linear-gradient(174deg, var(--paper-1) 0%, var(--paper-2) 58%, var(--paper-3) 100%);
   transform-origin:50% 88%;
@@ -255,7 +246,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   transition:opacity .95s ease, transform 1.2s cubic-bezier(.18,.78,.25,1.04);
 }
 .letter.unfold{ opacity:1; transform:none; }
-.letter::after{ /* paper grain, sits above the text but is non-interactive */
+.letter::after{
   content:""; position:absolute; inset:0; pointer-events:none; z-index:2;
   opacity:.13; mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
@@ -286,7 +277,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 .letter-wrap.ready .gold-btn{ opacity:1; transform:none; }
 
 /* ============================================================
-   6 · SCENE 4 — THE QUESTION (Yes / an uncatchable No)
+   6 · SCENE 4 — THE QUESTION
    ============================================================ */
 .ask-title{ font-family:var(--script); font-weight:600; font-size:clamp(40px,11vw,66px); line-height:1.04; color:var(--ink-deep); margin:0 0 .12em; text-align:center; text-shadow:0 2px 0 rgba(255,255,255,.6), 0 12px 22px rgba(60,88,140,.22); }
 .ask-sub{ font-size:clamp(19px,5.2vw,26px); line-height:1.42; color:#3d5b8a; text-align:center; margin:0 auto; max-width:30ch; }
@@ -356,7 +347,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 .ghost-btn:hover{ background:rgba(255,255,255,.85); }
 
 /* ============================================================
-   9 · FALLING PETALS + HEARTS (budget-capped so text stays readable)
+   9 · FALLING PETALS + HEARTS
    ============================================================ */
 #falling{ position:fixed; inset:0; z-index:8; pointer-events:none; overflow:hidden; }
 .petal{ position:absolute; top:-8vh; will-change:transform, opacity; animation-name:fall; animation-timing-function:linear; animation-fill-mode:forwards; user-select:none; }
@@ -395,9 +386,7 @@ button{ font-family:inherit; touch-action:manipulation; }
 </div>
 <div id="falling" aria-hidden="true"></div>
 
-<!-- ============================================================
-     SCENE 1 · he opens his heart
-     ============================================================ -->
+<!-- SCENE 1 -->
 <section class="scene active" id="scene1">
   <div class="hero">
     <div class="badge">💌 Chinnoda <span class="emoji">❤️</span> Ammulubaby</div>
@@ -426,9 +415,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   </div>
 </section>
 
-<!-- ============================================================
-     SCENE 2 · the two love letters + the old british-style seal
-     ============================================================ -->
+<!-- SCENE 2 -->
 <section class="scene" id="scene2">
   <p class="hint">Rendu letters nee kosam ready ga unnayi…</p>
 
@@ -451,9 +438,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   </div>
 </section>
 
-<!-- ============================================================
-     SCENE 3 · the letter unfolds
-     ============================================================ -->
+<!-- SCENE 3 -->
 <section class="scene" id="scene3">
   <div class="letter-wrap" id="letterWrap">
     <article class="letter" id="letter">
@@ -504,9 +489,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   </div>
 </section>
 
-<!-- ============================================================
-     SCENE 4 · the question — Yes, and a No that can't be caught
-     ============================================================ -->
+<!-- SCENE 4 -->
 <section class="scene" id="scene4">
   <h2 class="ask-title">Ammulubaby…</h2>
   <p class="ask-sub">Oka 15 days chance ivvu — anthe. Naa prema ni, naa change ni prove chesukuntanu. <span class="emoji">❤️</span></p>
@@ -519,9 +502,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   <p class="ask-note" id="askNote"></p>
 </section>
 
-<!-- ============================================================
-     SCENE 5 · heart loader
-     ============================================================ -->
+<!-- SCENE 5 -->
 <section class="scene" id="loaderScene">
   <div id="heartLoader">
     <svg class="heart-big" viewBox="0 0 100 92" aria-hidden="true">
@@ -540,9 +521,7 @@ button{ font-family:inherit; touch-action:manipulation; }
   </div>
 </section>
 
-<!-- ============================================================
-     SCENE 6 · thank you  (resultContainer + gifResult.play())
-     ============================================================ -->
+<!-- SCENE 6 -->
 <section class="scene" id="scene5">
   <div id="resultContainer">
     <h2 class="thanks-title">
@@ -562,12 +541,8 @@ button{ font-family:inherit; touch-action:manipulation; }
 </section>
 
 <script>
-/* ============================================================
-   PART 1 · helpers
-   ============================================================ */
 const $ = (id) => document.getElementById(id);
 
-/* gentle cross-fade between scenes (out fades while in appears) */
 function goto(from, to){
   if (from && from !== to){
     from.classList.remove("active");
@@ -577,9 +552,6 @@ function goto(from, to){
   if (to && !to.classList.contains("active")) to.classList.add("active");
 }
 
-/* ============================================================
-   PART 2 · falling flowers & hearts  (capped, self-cleaning)
-   ============================================================ */
 const falling = $("falling");
 const BLOSSOM = ["🌸","🌸","🌺","🌷","💮","🌼","🌻"];
 const HEARTS  = ["❤️","💗","💖","🤍","❤️","🥺"];
@@ -614,7 +586,7 @@ function spawnPetal(mode){
   p.style.setProperty("--spin", (Math.random()*720 - 360) + "deg");
   p.style.animationDuration = dur + "s";
   p.style.animationDelay = (Math.random() * (mode === "burst" ? 1.7 : 2.2)) + "s";
-  p.style.zIndex = Math.random() < .35 ? "0" : "1";   /* some petals drift behind the letter */
+  p.style.zIndex = Math.random() < .35 ? "0" : "1";
   falling.appendChild(p);
 
   setTimeout(() => { p.remove(); livePetals--; }, (dur + 4.5) * 1000);
@@ -635,17 +607,11 @@ function softHeartRain(){
   const t = setInterval(() => { spawnPetal("gentle"); if (++n > 34) clearInterval(t); }, 380);
 }
 
-/* ============================================================
-   PART 3 · scene 1 → scene 2
-   ============================================================ */
 $("nextBtn").addEventListener("click", () => {
   goto($("scene1"), $("scene2"));
   for (let i = 0; i < 9; i++) spawnPetal("gentle");
 });
 
-/* ============================================================
-   PART 4 · the seal breaks → flowers fall → the letter unfolds
-   ============================================================ */
 const seal = $("seal");
 let sealOpened = false;
 
@@ -669,20 +635,11 @@ seal.addEventListener("click", () => {
   }, 760);
 });
 
-/* ============================================================
-   PART 5 · scene 3 → scene 4
-   ============================================================ */
 $("toAsk").addEventListener("click", () => {
   goto($("scene3"), $("scene4"));
   for (let i = 0; i < 6; i++) spawnPetal("burst");
 });
 
-/* ============================================================
-   PART 6 · the No button that can never be caught
-   Keeps the original wiring (mouseover + click → moveButton)
-   but jumps between spread-out anchor spots inside the box,
-   never near "Yes" and never off-screen.
-   ============================================================ */
 const questionContainer = $("questionContainer");
 const noBtn  = $("noButton");
 const yesBtn = $("yesButton");
@@ -713,7 +670,6 @@ function moveButton(){
   const maxY = Math.max(padY, ch - bh - padY);
   const yesCx = cw/2, yesCy = ch/2;
 
-  /* eight spread-out resting spots: 4 corners + 4 edge midpoints */
   const anchors = [
     [padX, padY],
     [maxX, padY],
@@ -749,13 +705,11 @@ function moveButton(){
   noBtn.textContent = NO_LABELS[labelIdx];
   noBtn.style.fontSize = Math.max(15, 26 - dodges * 0.7) + "px";
 
-  /* and “Yes” grows a little every time — as it should */
   yesBtn.style.transform = "scale(" + Math.min(1.22, 1 + dodges*0.022) + ")";
 
   if (askNote) askNote.textContent = NOTES[Math.min(Math.ceil(dodges/2), NOTES.length - 1)];
 }
 
-/* touch screens can't hover — dodge before the tap can land */
 ["pointerdown","touchstart","focus"].forEach(evt => {
   noBtn.addEventListener(evt, (e) => {
     if (evt !== "focus") e.preventDefault();
@@ -764,15 +718,10 @@ function moveButton(){
 });
 window.addEventListener("resize", () => { lastPos = null; if (dodges) moveButton(); });
 
-/* ============================================================
-   PART 7 · Yes → heart loader → thank you
-   (the original snippet's flow, kept intact)
-   ============================================================ */
 const heartLoader = $("heartLoader");
 const resultContainer = $("resultContainer");
 const loaderScene = $("loaderScene");
 
-/* the snippet plays a GIF; we play a heart-rain + the beat instead */
 const gifResult = {
   el: document.querySelector(".heart-big"),
   play(){
@@ -784,7 +733,7 @@ const gifResult = {
 yesBtn.addEventListener("click", () => {
   goto($("scene4"), loaderScene);
 
-  const timeoutId = setTimeout(() => {
+  setTimeout(() => {
     heartLoader.style.display = "none";
     resultContainer.style.display = "flex";
     goto(loaderScene, $("scene5"));
@@ -792,9 +741,6 @@ yesBtn.addEventListener("click", () => {
   }, 3000);
 });
 
-/* ============================================================
-   PART 8 · replay everything
-   ============================================================ */
 $("replayBtn").addEventListener("click", () => {
   heartLoader.style.display = "grid";
   resultContainer.style.display = "none";
@@ -818,9 +764,6 @@ $("replayBtn").addEventListener("click", () => {
   goto($("scene5"), $("scene1"));
 });
 
-/* ============================================================
-   PART 9 · a tiny heart wherever she touches
-   ============================================================ */
 document.addEventListener("pointerdown", (e) => {
   const h = document.createElement("div");
   h.className = "tap-heart";

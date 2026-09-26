@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>To my love ❤ — Chinnoda</title>
+<meta name="theme-color" content="#c3d9f6" />
+<meta name="description" content="A sorry letter, a promise of 15 days, and a question only she can answer." />
+<style>
+/* ============================================================
+   FONTS — embedded as data URIs so the handwriting shows on every
+   device (phone, laptop, offline) instead of falling back to Times.
+   ============================================================ */
+/*FONTS*/
+
+/* ============================================================
+   0 · FOUNDATION
+   ============================================================ */
+:root{
+  --hand: "Caveat", "Segoe Script", "Bradley Hand", "Comic Sans MS", cursive;
+  --script: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
+  --print: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif;
+
+  --cloth-1:#e8f1fd;
+  --cloth-2:#cadeF9;
+  --cloth-3:#aacbf0;
+  --cloth-4:#8fb4e6;
+
+  --paper-1:#fdf7e9;
+  --paper-2:#f8edd7;
+  --paper-3:#f0e1c4;
+
+  --ink:#8f4d27;
+  --ink-deep:#733a1b;
+  --ink-soft:#a86239;
+  --gold:#b28a3f;
+  --gold-lite:#e8cc8b;
+  --wax-1:#ab2334;
+  --wax-2:#6b1120;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family:var(--hand);
+  color:var(--ink);
+  overflow:hidden;
+  background:
+    radial-gradient(125% 95% at 16% 4%, rgba(255,255,255,.9), rgba(255,255,255,0) 56%),
+    radial-gradient(95% 75% at 88% 97%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
+    linear-gradient(158deg, var(--cloth-1) 0%, var(--cloth-2) 32%, var(--cloth-3) 66%, var(--cloth-4) 100%);
+}
+button{ font-family:inherit; touch-action:manipulation; }
+
+/* the bedsheet: woven texture + slow breathing folds */
+.cloth{ position:fixed; inset:-12%; z-index:0; pointer-events:none; }
+.cloth::before{
+  content:""; position:absolute; inset:0; mix-blend-mode:soft-light; opacity:.7;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0 1px, rgba(255,255,255,0) 1px 4px),
+    repeating-linear-gradient(0deg, rgba(88,122,180,.10) 0 1px, rgba(88,122,180,0) 1px 6px);
+}
+.cloth::after{
+  content:""; position:absolute; inset:0; filter:blur(18px); opacity:.85;
+  animation:clothBreathe 18s ease-in-out infinite;
+  background:
+    linear-gradient(112deg, rgba(255,255,255,0) 33%, rgba(255,255,255,.6) 42%, rgba(255,255,255,0) 51%),
+    linear-gradient(112deg, rgba(255,255,255,0) 63%, rgba(255,255,255,.42) 72%, rgba(255,255,255,0) 81%),
+    linear-gradient(18deg, rgba(72,108,168,.20) 0 44%, rgba(72,108,168,0) 58%);
+}
+@keyframes clothBreathe{
+  0%,100%{ transform:translate3d(0,0,0) scale(1.02); }
+  50%    { transform:translate3d(-1.4%,1%,0) scale(1.05); }
+}
+
+/* the pearl necklace from the photo */
+.pearls{ position:fixed; left:max(10px,3vw); top:11vh; z-index:1; display:flex; flex-direction:column; gap:9px; pointer-events:none; animation:pearlSway 10s ease-in-out infinite; }
+.pearls i{ width:15px; height:15px; border-radius:50%;
+  background:radial-gradient(circle at 32% 28%, #fff 0 14%, #f6f3ed 36%, #ded8cd 64%, #c2bcb0 100%);
+  box-shadow:0 2px 5px rgba(58,84,130,.26), inset -1px -2px 3px rgba(120,112,96,.35); }
+@keyframes pearlSway{ 0%,100%{ transform:rotate(-6deg);} 50%{ transform:rotate(-3.5deg) translateY(9px);} }
+
+/* ============================================================
+   1 · SCENE ARCHITECTURE  (gentle cross-fade, no stacking bugs)
+   ============================================================ */
+.scene{
+  position:fixed; inset:0; z-index:3;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:clamp(14px,3.2vh,40px) 16px calc(clamp(14px,3.2vh,40px) + env(safe-area-inset-bottom));
+  overflow:hidden;
+  opacity:0; visibility:hidden; transform:scale(.975);
+  transition:opacity .5s ease, transform .7s cubic-bezier(.2,.7,.3,1), visibility 0s linear .5s;
+}
+.scene.active{
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .6s ease .1s, transform .75s cubic-bezier(.2,.7,.3,1) .08s, visibility 0s;
+}
+.scene.leaving{ opacity:0; transform:scale(1.035); }
+
+/* ============================================================
+   2 · SHARED BITS
+   ============================================================ */
+.hh, .emoji{ font-family:var(--emoji); font-style:normal; }
+.gold-btn{
+  font-family:var(--hand); font-weight:600; font-size:clamp(20px,5vw,26px); color:#4a2b10;
+  padding:.34em 1.5em .46em; border:0; border-radius:999px; cursor:pointer;
+  background:radial-gradient(120% 160% at 30% 10%, #fff7e0 0%, var(--gold-lite) 34%, #caa054 68%, #a67c33 100%);
+  box-shadow:0 10px 20px rgba(60,80,120,.30), inset 0 2px 0 rgba(255,255,255,.8), inset 0 -3px 6px rgba(120,86,26,.34);
+  transition:transform .25s cubic-bezier(.2,.8,.3,1.4), box-shadow .25s, opacity .6s ease;
+  position:relative; overflow:hidden;
+}
+.gold-btn:hover{ transform:translateY(-3px) scale(1.04); box-shadow:0 16px 26px rgba(60,80,120,.34), inset 0 2px 0 rgba(255,255,255,.85); }
+.gold-btn:active{ transform:translateY(0) scale(.97); }
+.gold-btn::after{
+  content:""; position:absolute; inset:0; border-radius:999px; pointer-events:none;
+  background:linear-gradient(100deg, transparent 32%, rgba(255,255,255,.8) 47%, transparent 62%);
+  background-size:250% 100%; animation:shimmer 3.6s ease-in-out infinite;
+}
+@keyframes shimmer{ 0%{ background-position:180% 0; } 55%,100%{ background-position:-90% 0; } }
+.sh{ color:#cf8f42; }
+.ink-strong{ color:var(--ink-deep); font-weight:600; }
+.hi{ background-image:linear-gradient(transparent 58%, rgba(228,183,104,.6) 58%); background-repeat:no-repeat; background-size:100% 100%; padding:0 .1em; }
+.under{ border-bottom:2px dotted rgba(178,138,63,.8); }
+
+/* ============================================================
+   3 · SCENE 1 — THE APOLOGY
+   ============================================================ */
+.hero{ width:min(640px,94vw); text-align:center; animation:riseIn .95s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes riseIn{ from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:none;} }
+
+.badge{
+  display:inline-flex; align-items:center; gap:.5em;
+  font-family:var(--script); font-size:clamp(15px,4vw,19px); color:#4d3a24;
+  background:linear-gradient(180deg, rgba(255,253,247,.96), rgba(255,247,229,.85));
+  border:1px solid rgba(178,138,63,.5); border-radius:999px;
+  padding:.3em 1.1em .42em; box-shadow:0 8px 18px rgba(52,78,124,.2);
+}
+.hero h1{
+  font-family:var(--script); font-weight:600;
+  font-size:clamp(44px,13vw,78px); line-height:1.02; margin:.3em 0 .06em;
+  color:var(--ink-deep); text-shadow:0 2px 0 rgba(255,255,255,.6), 0 14px 26px rgba(60,88,140,.22);
+}
+.hero h1 .hl{ display:block; font-family:var(--hand); font-weight:400; font-size:.42em; margin-top:.34em; color:var(--ink-soft); }
+.wave-line{ display:block; width:min(300px,66vw); margin:.3em auto .5em; opacity:.8; }
+
+.hero-card{
+  margin:0 auto; padding:clamp(18px,4.4vw,30px) clamp(20px,5vw,36px);
+  background:linear-gradient(172deg, var(--paper-1), var(--paper-2) 56%, var(--paper-3));
+  border-radius:20px 22px 18px 24px;
+  box-shadow:0 22px 44px rgba(48,72,116,.30), inset 0 1px 0 rgba(255,255,255,.9);
+  font-size:clamp(19px,5vw,26px); line-height:1.46; text-align:left; color:var(--ink);
+  max-height:45vh; overflow:auto; position:relative;
+}
+.hero-card::-webkit-scrollbar{ width:5px; }
+.hero-card::-webkit-scrollbar-thumb{ background:rgba(178,138,63,.4); border-radius:99px; }
+.hero-card p{ margin:0 0 .6em; }
+.hero-card p:last-child{ margin-bottom:0; }
+
+.hero-cta{ margin-top:clamp(12px,2.8vh,26px); display:flex; flex-direction:column; align-items:center; gap:10px; }
+.whisper{ font-size:clamp(16px,4.2vw,21px); color:#42608f; opacity:.92; }
+
+/* ============================================================
+   4 · SCENE 2 — THE TWO LETTERS + THE OLD WAX SEAL
+   ============================================================ */
+.hint{
+  font-family:var(--script); font-size:clamp(20px,5.6vw,30px); color:#3f5d8c;
+  text-align:center; margin:0 0 clamp(8px,2vh,18px); text-shadow:0 1px 0 rgba(255,255,255,.7);
+  animation:whisperPulse 3.4s ease-in-out infinite;
+}
+@keyframes whisperPulse{ 0%,100%{ opacity:.85; } 50%{ opacity:1; } }
+
+.stack{ position:relative; display:flex; align-items:center; justify-content:center; }
+
+.letter-back{
+  position:absolute; width:min(300px,58vw); aspect-ratio:3/4;
+  background:linear-gradient(168deg,#fdf7ea,#f4e7cd);
+  border-radius:5px 7px 4px 8px; padding:15px 14px; overflow:hidden;
+  box-shadow:0 16px 30px rgba(47,72,116,.26);
+  font-family:var(--print); font-size:clamp(9px,2.4vw,12px); line-height:1.62; color:rgba(139,74,38,.72);
+}
+.letter-back .lb-title{ font-family:var(--script); font-size:1.5em; color:var(--ink); margin-bottom:.35em; }
+.letter-back.l2{ transform:rotate(-12deg) translate(-17%,9%); opacity:.88; }
+.letter-back.l1{ transform:rotate(9deg) translate(17%,-3%); }
+.letter-back.l1::after{ /* a tiny wax dot, so it reads as a sealed keepsake */
+  content:""; position:absolute; right:10px; bottom:10px; width:16px; height:16px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #c3384a, #7d1524 70%);
+  box-shadow:0 2px 4px rgba(60,16,24,.4);
+}
+@media (max-width:600px){ .letter-back.l2{ display:none; } .letter-back.l1{ transform:rotate(8deg) translate(14%,-6%); } }
+
+.envelope{
+  position:relative; width:min(330px,64vw); aspect-ratio:1.55/1; border-radius:10px;
+  background:linear-gradient(168deg,#fdf6e7 0%,#f7ebd4 52%,#eee0c2 100%);
+  box-shadow:0 26px 46px rgba(44,68,112,.34), inset 0 0 0 1px rgba(255,255,255,.7);
+  animation:floaty 6.5s ease-in-out infinite;
+}
+@keyframes floaty{ 0%,100%{ transform:rotate(-2deg) translateY(0); } 50%{ transform:rotate(1.6deg) translateY(-10px); } }
+.envelope::before{ /* flap */
+  content:""; position:absolute; inset:0; border-radius:10px 10px 0 0;
+  background:linear-gradient(178deg,#f8eed9 0%,#f1e3c8 62%,rgba(232,216,187,0) 100%);
+  clip-path:polygon(0 0, 100% 0, 50% 56%);
+  box-shadow:inset 0 -1px 0 rgba(178,138,63,.25);
+}
+.envelope::after{ border-top:1px solid rgba(178,138,63,.16); }
+
+.seal{
+  position:absolute; left:50%; top:52%; translate:-50% -50%; z-index:4;
+  width:clamp(94px,24vw,128px); height:clamp(94px,24vw,128px);
+  border:0; padding:0; border-radius:50%; cursor:pointer;
+  background:radial-gradient(circle at 34% 26%, #c4384a 0%, var(--wax-1) 34%, #7d1524 76%, var(--wax-2) 100%);
+  display:grid; place-items:center;
+  box-shadow:0 16px 26px rgba(60,16,24,.45), inset 0 3px 6px rgba(255,255,255,.28), inset 0 -6px 12px rgba(60,8,14,.5);
+  animation:sealPulse 2.6s ease-in-out infinite;
+  transition:translate .55s cubic-bezier(.3,.7,.3,1), transform .55s cubic-bezier(.3,.8,.3,1.3), opacity .55s, filter .5s;
+}
+.seal:hover{ filter:brightness(1.07); }
+.seal:focus-visible{ outline:3px dashed rgba(140,37,52,.7); outline-offset:6px; }
+@keyframes sealPulse{
+  0%,100%{ box-shadow:0 16px 26px rgba(60,16,24,.45), inset 0 3px 6px rgba(255,255,255,.28), 0 0 0 0 rgba(197,86,86,.5); }
+  60%    { box-shadow:0 16px 26px rgba(60,16,24,.45), inset 0 3px 6px rgba(255,255,255,.28), 0 0 0 24px rgba(197,86,86,0); }
+}
+.seal-ring{
+  width:78%; height:78%; border-radius:50%; display:grid; place-items:center; position:relative;
+  border:2px solid rgba(242,216,160,.85);
+  box-shadow:inset 0 0 0 4px rgba(120,20,32,.5), 0 0 0 1px rgba(120,20,32,.55);
+}
+.seal-ring::before{ content:""; position:absolute; inset:6px; border-radius:50%; border:1px dotted rgba(242,216,160,.75); }
+.seal-ring span{ font-family:var(--script); font-weight:600; color:#f6e0af; font-size:clamp(40px,11vw,56px); line-height:1; margin-top:.04em; text-shadow:0 2px 3px rgba(60,8,14,.7); }
+.seal.opened{ animation:none; translate:-50% -50%; transform:scale(1.5) rotate(10deg); opacity:0; filter:blur(2px); }
+.seal-hint{
+  position:absolute; left:50%; top:calc(52% + clamp(60px,15vw,84px)); translate:-50% 0;
+  font-family:var(--script); font-size:clamp(19px,5vw,25px); color:#8c2534; white-space:nowrap; z-index:5;
+  pointer-events:none; animation:tapMe 1.9s ease-in-out infinite;
+}
+@keyframes tapMe{ 0%,100%{ transform:translateY(0) rotate(-1.5deg); opacity:.88; } 50%{ transform:translateY(-6px) rotate(1.5deg); opacity:1; } }
+.seal.opened ~ .seal-hint{ opacity:0; transition:opacity .3s; }
+
+/* ============================================================
+   5 · SCENE 3 — THE LETTER (torn paper, like the photograph)
+   ============================================================ */
+.letter-wrap{ display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.2vh,20px); width:100%; }
+
+.letter{
+  --mask: __MASK__;
+  position:relative;
+  width:min(620px,95vw);
+  -webkit-mask-image:var(--mask); -webkit-mask-size:100% 100%; -webkit-mask-repeat:no-repeat;
+  mask-image:var(--mask); mask-size:100% 100%; mask-repeat:no-repeat;
+  filter:drop-shadow(0 26px 34px rgba(36,58,98,.34));
+  background:linear-gradient(174deg, var(--paper-1) 0%, var(--paper-2) 58%, var(--paper-3) 100%);
+  transform-origin:50% 88%;
+  opacity:0; transform:translateY(80px) scale(.52) rotateX(42deg);
+  transition:opacity .95s ease, transform 1.2s cubic-bezier(.18,.78,.25,1.04);
+}
+.letter.unfold{ opacity:1; transform:none; }
+.letter::after{ /* paper grain, sits above the text but is non-interactive */
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:2;
+  opacity:.13; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+.letter-inner{
+  position:relative; z-index:1;
+  max-height:min(72vh, 640px); overflow:auto; overscroll-behavior:contain;
+  padding:clamp(30px,7vw,56px) clamp(22px,6vw,52px) clamp(28px,6vw,50px);
+  font-size:clamp(19px,5.1vw,26px); line-height:1.5; color:var(--ink);
+}
+.letter-inner::-webkit-scrollbar{ width:5px; }
+.letter-inner::-webkit-scrollbar-thumb{ background:rgba(178,138,63,.45); border-radius:99px; }
+.letter-inner > p{ margin:0 0 .68em; }
+.letter .to{ font-family:var(--script); font-weight:600; text-align:center; font-size:1.55em; color:var(--ink-deep); margin:0 0 .35em; text-shadow:0 1px 0 rgba(255,255,255,.7); }
+.letter .postmark{ display:block; margin:.1em auto 1.35em; width:min(250px,62vw); opacity:.72; }
+.letter .sign{ margin:1.35em 0 .05em; text-align:right; }
+.letter .name{ font-family:var(--script); font-weight:600; font-size:1.6em; color:var(--ink-deep); text-align:right; margin:0; transform:rotate(-2.2deg); }
+.letter .flourish{ display:block; margin:.3em 0 0 auto; width:min(220px,50vw); opacity:.8; }
+.letter .ps{ margin-top:1em; font-size:.92em; color:var(--ink-soft); transform:rotate(-.7deg); }
+.scroll-hint{
+  position:sticky; bottom:0; display:block; text-align:center;
+  font-size:.72em; color:rgba(139,74,38,.7); padding:.2em 0 .1em;
+  background:linear-gradient(transparent, rgba(252,245,230,.92) 55%);
+  animation:tapMe 2.2s ease-in-out infinite; transition:opacity .4s;
+}
+.scroll-hint.gone{ opacity:0; }
+.letter-wrap .gold-btn{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1.3); }
+.letter-wrap.ready .gold-btn{ opacity:1; transform:none; }
+
+/* ============================================================
+   6 · SCENE 4 — THE QUESTION (Yes / an uncatchable No)
+   ============================================================ */
+.ask-title{ font-family:var(--script); font-weight:600; font-size:clamp(40px,11vw,66px); line-height:1.04; color:var(--ink-deep); margin:0 0 .12em; text-align:center; text-shadow:0 2px 0 rgba(255,255,255,.6), 0 12px 22px rgba(60,88,140,.22); }
+.ask-sub{ font-size:clamp(19px,5.2vw,26px); line-height:1.42; color:#3d5b8a; text-align:center; margin:0 auto; max-width:30ch; }
+.ask-note{ font-size:clamp(17px,4.6vw,22px); color:#8b2534; text-align:center; margin:.85em auto 0; min-height:1.6em; max-width:32ch; }
+.question-container{
+  position:relative; width:min(660px,94vw); height:clamp(200px,34vh,300px);
+  margin-top:clamp(10px,2.4vh,24px); border-radius:26px;
+  background:rgba(255,255,255,.3); border:1px solid rgba(255,255,255,.62);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 18px 34px rgba(52,78,124,.18);
+  backdrop-filter:blur(2px);
+}
+.btn{ border:0; cursor:pointer; border-radius:999px; padding:.36em 1.35em .48em; font-size:clamp(20px,5vw,26px); font-weight:600; transition:transform .3s cubic-bezier(.2,.8,.3,1.4), box-shadow .3s, background-color .3s, color .3s; }
+#yesButton{
+  position:absolute; left:50%; top:50%; translate:-50% -50%; color:#5a0f1b;
+  background:radial-gradient(120% 160% at 30% 10%, #ffe7eb 0%, #f5a9b5 34%, #e2707f 70%, #c94b5d 100%);
+  box-shadow:0 14px 26px rgba(120,32,48,.34), inset 0 2px 0 rgba(255,255,255,.85);
+  animation:yesGlow 2.4s ease-in-out infinite;
+}
+#yesButton:hover{ box-shadow:0 20px 32px rgba(120,32,48,.42), inset 0 2px 0 rgba(255,255,255,.9); }
+@keyframes yesGlow{ 0%,100%{ filter:drop-shadow(0 0 0 rgba(233,120,138,0)); } 50%{ filter:drop-shadow(0 6px 16px rgba(233,120,138,.75)); } }
+#noButton{
+  position:absolute; left:calc(50% + 120px); top:calc(50% - 18px);
+  background:linear-gradient(180deg,#fff,#eef3fb); color:#3f5d8c;
+  box-shadow:0 10px 20px rgba(52,78,124,.24), inset 0 1px 0 #fff;
+  transition:left .42s cubic-bezier(.2,.8,.3,1.25), top .42s cubic-bezier(.2,.8,.3,1.25),
+             transform .28s, font-size .28s, padding .28s;
+  will-change:left, top;
+}
+#noButton:active{ transform:scale(.94); }
+@media (max-width:560px){ #noButton{ left:calc(50% + 92px); } }
+
+/* ============================================================
+   7 · SCENE 5 — HEART LOADER
+   ============================================================ */
+#loaderScene{ backdrop-filter:blur(3px); background:rgba(228,239,253,.34); }
+#heartLoader{ display:grid; place-items:center; gap:16px; text-align:center; }
+.heart-big{ width:clamp(98px,26vw,150px); animation:heartbeat 1.15s ease-in-out infinite; filter:drop-shadow(0 16px 24px rgba(150,40,60,.38)); }
+@keyframes heartbeat{ 0%,100%{ transform:scale(1);} 14%{ transform:scale(1.14);} 28%{ transform:scale(.98);} 42%{ transform:scale(1.09);} 60%{ transform:scale(1);} }
+.loader-text{ font-family:var(--script); font-size:clamp(21px,5.6vw,28px); color:var(--ink-deep); }
+.loader-bar{ width:min(300px,70vw); height:8px; border-radius:99px; overflow:hidden; background:rgba(255,255,255,.6); box-shadow:inset 0 1px 3px rgba(52,78,124,.25); }
+.loader-bar i{ display:block; height:100%; width:0; background:linear-gradient(90deg,#f0a3ae,#cf8f42); animation:fill 3s linear forwards; }
+@keyframes fill{ to{ width:100%; } }
+
+/* ============================================================
+   8 · SCENE 6 — THANK YOU
+   ============================================================ */
+#resultContainer{
+  display:none; width:min(680px,94vw); text-align:center;
+  flex-direction:column; align-items:center; gap:clamp(10px,2vh,18px);
+  animation:riseIn .9s cubic-bezier(.2,.7,.3,1) both;
+}
+.thanks-title{ font-family:var(--script); font-weight:600; margin:0; font-size:clamp(42px,12vw,74px); line-height:1.04; color:var(--ink-deep); text-shadow:0 2px 0 rgba(255,255,255,.65), 0 16px 28px rgba(60,88,140,.26); }
+.thanks-title span{ display:block; font-family:var(--hand); font-size:.36em; color:var(--ink-soft); margin-top:.42em; line-height:1.35; }
+.thanks-card{
+  padding:clamp(18px,4.4vw,30px) clamp(20px,5vw,34px); border-radius:22px;
+  background:linear-gradient(172deg, var(--paper-1), var(--paper-2) 60%, var(--paper-3));
+  box-shadow:0 24px 46px rgba(48,72,116,.32), inset 0 1px 0 rgba(255,255,255,.9);
+  font-size:clamp(19px,5.1vw,26px); line-height:1.46; color:var(--ink); max-height:42vh; overflow:auto;
+}
+.thanks-card p{ margin:0 0 .6em; }
+.thanks-card p:last-child{ margin:0; }
+.thanks-foot{ font-size:clamp(18px,4.8vw,23px); color:#3f5d8c; }
+.ghost-btn{
+  font-size:clamp(16px,4.4vw,20px); background:rgba(255,255,255,.5); border:1px dashed rgba(63,93,140,.6);
+  color:#3f5d8c; padding:.3em 1.1em .42em; border-radius:999px; cursor:pointer;
+}
+.ghost-btn:hover{ background:rgba(255,255,255,.85); }
+
+/* ============================================================
+   9 · FALLING PETALS + HEARTS (budget-capped so text stays readable)
+   ============================================================ */
+#falling{ position:fixed; inset:0; z-index:8; pointer-events:none; overflow:hidden; }
+.petal{ position:absolute; top:-8vh; will-change:transform, opacity; animation-name:fall; animation-timing-function:linear; animation-fill-mode:forwards; user-select:none; }
+.petal.blossom{ border-radius:50% 50% 50% 6px / 60% 60% 40% 40%; background:radial-gradient(circle at 32% 28%, #fff3f7 0%, #f8cbda 45%, #e79bb2 100%); box-shadow:inset -1px -2px 3px rgba(180,90,120,.32); }
+.petal.leaf{ border-radius:4px 60% 4px 60%; background:linear-gradient(150deg,#d2e2ac,#93b167); box-shadow:inset -1px -2px 3px rgba(70,100,40,.32); }
+@keyframes fall{
+  0%  { transform:translate3d(0,-12vh,0) rotate(0) rotateY(0); opacity:0; }
+  9%  { opacity:.95; }
+  100%{ transform:translate3d(var(--drift,40px),118vh,0) rotate(var(--spin,420deg)) rotateY(540deg); opacity:.9; }
+}
+.tap-heart{ position:fixed; z-index:9; pointer-events:none; font-family:var(--emoji); font-size:20px; animation:tapPop .9s ease-out forwards; }
+@keyframes tapPop{ 0%{ transform:translate(-50%,-50%) scale(.4); opacity:1; } 100%{ transform:translate(-50%,-190%) scale(1.3); opacity:0; } }
+
+/* ============================================================
+   10 · RESPONSIVE + MOTION PREFERENCES
+   ============================================================ */
+@media (max-width:560px){
+  .pearls{ display:none; }
+  .hero-card{ max-height:42vh; }
+  .letter-inner{ max-height:66vh; }
+  .question-container{ height:clamp(186px,32vh,250px); }
+}
+@media (min-width:1400px){ .hero{ width:700px; } }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001s !important; animation-iteration-count:1 !important; transition-duration:.15s !important; }
+  .cloth::after{ animation:none; }
+  .petal{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cloth"></div>
+<div class="pearls" aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+</div>
+<div id="falling" aria-hidden="true"></div>
+
+<!-- ============================================================
+     SCENE 1 · he opens his heart
+     ============================================================ -->
+<section class="scene active" id="scene1">
+  <div class="hero">
+    <div class="badge">💌 Chinnoda <span class="emoji">❤️</span> Ammulubaby</div>
+
+    <h1>
+      To Ammulubaby…
+      <span class="hl">Naa gundello oka sorry undi… mariyu naa lips meeda oka promise undi.</span>
+    </h1>
+
+    <svg class="wave-line" viewBox="0 0 300 20" fill="none" aria-hidden="true">
+      <path d="M2 12 C 40 2, 60 20, 96 10 S 158 2, 194 12 S 254 20, 298 8" stroke="#b28a3f" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+      <circle cx="150" cy="10" r="3.4" fill="#cf8f42"/>
+    </svg>
+
+    <div class="hero-card">
+      <p>Nenu opukuntuna — <span class="ink-strong">nenu mistake chesina, nenu nee feelings ni hurt chesina.</span> I am very sorry about that. <span class="emoji">❤️</span></p>
+      <p>Kani nenu realise ina. Nenu change ina. Nuv first kalisina anand ni, ina first 2 years lo unna anand ni — <span class="hi">alaa malli chudalani undi.</span></p>
+      <p>Nee prema ni maatalu lo cheppalenu. Nuv naa life loki vachina roju nunchi naa prathi anandam nuvve — anduke ee maata cheppali anipinchi.</p>
+      <p>Anduke ee chinna letter. Oka page. Oka promise. <span class="under">Oka 15 days.</span> Anthe. <span class="emoji">🥺❤️</span></p>
+    </div>
+
+    <div class="hero-cta">
+      <button class="gold-btn" id="nextBtn">Next <span class="emoji">❤️</span></button>
+      <div class="whisper">Konchem sepu theesukoni saduvu… nenu raasindi nijam.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 2 · the two love letters + the old british-style seal
+     ============================================================ -->
+<section class="scene" id="scene2">
+  <p class="hint">Rendu letters nee kosam ready ga unnayi…</p>
+
+  <div class="stack">
+    <div class="letter-back l2" aria-hidden="true">
+      <div class="lb-title">To my love <span class="emoji">❤️</span></div>
+      There is a place, indeed, a person, a soul that I love and I am committed to. We can have a connection that no matter the circumstances surrounds us, we are present in each other's mind.
+    </div>
+    <div class="letter-back l1" aria-hidden="true">
+      <div class="lb-title">To my love <span class="emoji">❤️</span></div>
+      I love you not only for who you are, but for who I am when I am with you. I love you for the part of me that you bring out.
+    </div>
+
+    <div class="envelope">
+      <button class="seal" id="seal" aria-label="Open the seal">
+        <span class="seal-ring"><span>C</span></span>
+      </button>
+      <div class="seal-hint">Click the seal <span class="emoji">❤️</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 3 · the letter unfolds
+     ============================================================ -->
+<section class="scene" id="scene3">
+  <div class="letter-wrap" id="letterWrap">
+    <article class="letter" id="letter">
+      <div class="letter-inner" id="letterInner">
+        <p class="to">To my love <span class="emoji">❤️</span></p>
+
+        <svg class="postmark" viewBox="0 0 260 20" fill="none" aria-hidden="true">
+          <path d="M4 14 C 46 4, 74 18, 118 10 S 194 4, 256 12" stroke="#b28a3f" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 6"/>
+        </svg>
+
+        <div class="letter-body">
+          <p>Ammulubaby,</p>
+
+          <p>Nenu opukuntuna… <span class="ink-strong">nenu mistake chesina, nenu nee feelings ni hurt chesina.</span> <span class="hi">I am very sorry about that.</span></p>
+
+          <p>Kani nenu realise ina. Nenu change ina. Nuv first kalisina anand ni, ina first 2 years lo unna anand ni — alaa malli chudalani undi. Anduke ee maata, ee page, ee prema. <span class="emoji">❤️</span></p>
+
+          <p>Nuv anukovchu, <span class="under">“Nenu vee mla naa life loki vasthe, nenu ah 15 days nachiga undi malli mistake repeat chestha”</span> ani. Kani trust me — intha issue iyaka nenu asalu repeat cheyanu. Nenu ee 15 days alaa untano, <span class="hi">netho life long alaney unta.</span></p>
+
+          <p>Naaku telusu, nuv naku chance iyaniki nee manasu rdhuvu ani. Kani oksari echi chudu… <span class="ink-strong">mana life chala beautiful ga untadi.</span></p>
+
+          <p>Eni days nenu prema chupiyale, epudu chupistundu. Kani neku em anipisthle, feelings vasthale ani nuv anukovchu. Oksari manam spend chesina <span class="hi">happy moments recollect chesuko</span> — oksari anthe. Naku please oka 15 days chance ivvu. <span class="emoji">🙏</span></p>
+
+          <p>Neku patha anand ni introduce chestha. Manam kothaga start chedam — ee kotha journey lo <span class="ink-strong">hurting ki, misunderstanding ki place iyyakunda.</span> Chusukunta. Trust me.</p>
+
+          <p>Oka 15 days chance echi chudu — nenu asalu oka mistake kuda cheyanu. Last 4 years nunchi nalo change expect chestunnav; epudu change ina. Oksari natho mataladu… <span class="ink-strong">you will see the change in me.</span> <span class="emoji">❤️</span></p>
+
+          <p>Nenu perfect kaadu. Kani ninnu hurt cheyyakunda undadam matram nerchukuntanu — maatalu kaadu, cheshtalone chupista.</p>
+
+          <p>Nuv “Yes” anna roju nunchi, naa prathi roju nee peruthone start avutundi. <span class="emoji">❤️</span></p>
+
+          <p class="ps">P.S. — Nuv “No” anukuntunnava? Aa button ni pattukovadam nee valla kaadu. <span class="emoji">😌❤️</span></p>
+        </div>
+
+        <p class="sign">Yours, all my love,</p>
+        <p class="name">— Chinnoda <span class="emoji">❤️</span></p>
+
+        <svg class="flourish" viewBox="0 0 230 26" fill="none" aria-hidden="true">
+          <path d="M4 18 C 40 6, 62 24, 96 14 S 156 4, 190 16 C 206 22, 216 14, 226 10" stroke="#8b4a26" stroke-width="1.8" stroke-linecap="round" opacity=".8"/>
+          <path d="M150 8 c 8 -6, 18 2, 8 6 c -8 3, -14 -4, -4 -8" stroke="#cf8f42" stroke-width="1.5" fill="none"/>
+        </svg>
+
+        <span class="scroll-hint" id="scrollHint">scroll chesi migilinadi chudu ⌄</span>
+      </div>
+    </article>
+
+    <button class="gold-btn" id="toAsk">Next <span class="emoji">❤️</span></button>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 4 · the question — Yes, and a No that can't be caught
+     ============================================================ -->
+<section class="scene" id="scene4">
+  <h2 class="ask-title">Ammulubaby…</h2>
+  <p class="ask-sub">Oka 15 days chance ivvu — anthe. Naa prema ni, naa change ni prove chesukuntanu. <span class="emoji">❤️</span></p>
+
+  <div class="question-container" id="questionContainer">
+    <button class="btn" id="yesButton">Yes <span class="emoji">❤️</span></button>
+    <button class="btn" id="noButton" onmouseover="moveButton()" onclick="moveButton()">No</button>
+  </div>
+
+  <p class="ask-note" id="askNote"></p>
+</section>
+
+<!-- ============================================================
+     SCENE 5 · heart loader
+     ============================================================ -->
+<section class="scene" id="loaderScene">
+  <div id="heartLoader">
+    <svg class="heart-big" viewBox="0 0 100 92" aria-hidden="true">
+      <defs>
+        <radialGradient id="hgrad" cx="34%" cy="26%" r="80%">
+          <stop offset="0%" stop-color="#ffd9e0"/>
+          <stop offset="42%" stop-color="#ef7f92"/>
+          <stop offset="100%" stop-color="#bd3149"/>
+        </radialGradient>
+      </defs>
+      <path d="M50 88 C 14 62, 2 44, 2 30 C 2 14, 14 4, 27 4 C 37 4, 45 10, 50 18 C 55 10, 63 4, 73 4 C 86 4, 98 14, 98 30 C 98 44, 86 62, 50 88 Z" fill="url(#hgrad)" stroke="#8f2338" stroke-width="1.5"/>
+      <circle cx="34" cy="26" r="6" fill="#fff" opacity=".55"/>
+    </svg>
+    <div class="loader-text">Naa prema ni nee vaipu pampistunna… <span class="emoji">❤️</span></div>
+    <div class="loader-bar"><i></i></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SCENE 6 · thank you  (resultContainer + gifResult.play())
+     ============================================================ -->
+<section class="scene" id="scene5">
+  <div id="resultContainer">
+    <h2 class="thanks-title">
+      Thank You, Ammulubaby <span class="emoji">❤️</span>
+      <span>Nuv “Yes” annavu… anduke naa prathi roju varam la marindi.</span>
+    </h2>
+
+    <div class="thanks-card">
+      <p><span class="ink-strong">15 days.</span> Oka kotha start. Nenu alaage unta — <span class="hi">hurt ledu, misunderstanding ledu.</span></p>
+      <p>Nee navvu, nee prema, mana happy moments — anni malli kothaga. Nuv nammithey chalu, nenu nirupista. <span class="emoji">🥺❤️</span></p>
+      <p>Thank you… nijamga, chala chala thank you. Naa pranamantha neeye. <span class="emoji">❤️</span></p>
+    </div>
+
+    <p class="thanks-foot">— Your Chinnoda, forever &amp; a day <span class="emoji">❤️</span></p>
+    <button class="ghost-btn" id="replayBtn">Malli saduvu ↺</button>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   PART 1 · helpers
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+
+/* gentle cross-fade between scenes (out fades while in appears) */
+function goto(from, to){
+  if (from && from !== to){
+    from.classList.remove("active");
+    from.classList.add("leaving");
+    setTimeout(() => from.classList.remove("leaving"), 560);
+  }
+  if (to && !to.classList.contains("active")) to.classList.add("active");
+}
+
+/* ============================================================
+   PART 2 · falling flowers & hearts  (capped, self-cleaning)
+   ============================================================ */
+const falling = $("falling");
+const BLOSSOM = ["🌸","🌸","🌺","🌷","💮","🌼","🌻"];
+const HEARTS  = ["❤️","💗","💖","🤍","❤️","🥺"];
+let livePetals = 0;
+const MAX_PETALS = 26;
+
+function spawnPetal(mode){
+  if (livePetals >= MAX_PETALS) return;
+  livePetals++;
+
+  const p = document.createElement("div");
+  const useEmoji = Math.random() < (mode === "burst" ? .5 : .3);
+
+  if (useEmoji){
+    p.className = "petal";
+    p.textContent = Math.random() < .5
+      ? HEARTS[Math.floor(Math.random()*HEARTS.length)]
+      : BLOSSOM[Math.floor(Math.random()*BLOSSOM.length)];
+    p.style.fontFamily = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+    p.style.fontSize = (12 + Math.random()*16) + "px";
+    p.style.opacity = ".9";
+  } else {
+    p.className = "petal " + (Math.random() < .7 ? "blossom" : "leaf");
+    const s = 8 + Math.random()*11;
+    p.style.width  = s + "px";
+    p.style.height = (s * (1.05 + Math.random()*.5)) + "px";
+  }
+
+  const dur = 4.5 + Math.random()*5.5;
+  p.style.left = (Math.random()*104 - 2) + "vw";
+  p.style.setProperty("--drift", (Math.random()*170 - 85) + "px");
+  p.style.setProperty("--spin", (Math.random()*720 - 360) + "deg");
+  p.style.animationDuration = dur + "s";
+  p.style.animationDelay = (Math.random() * (mode === "burst" ? 1.7 : 2.2)) + "s";
+  p.style.zIndex = Math.random() < .35 ? "0" : "1";   /* some petals drift behind the letter */
+  falling.appendChild(p);
+
+  setTimeout(() => { p.remove(); livePetals--; }, (dur + 4.5) * 1000);
+}
+
+let rainTimer = null;
+function startFlowerRain(){
+  for (let i = 0; i < 40; i++) spawnPetal("burst");
+  if (rainTimer) clearInterval(rainTimer);
+  let ticks = 0;
+  rainTimer = setInterval(() => {
+    spawnPetal("gentle");
+    if (++ticks > 40){ clearInterval(rainTimer); rainTimer = null; }
+  }, 340);
+}
+function softHeartRain(){
+  let n = 0;
+  const t = setInterval(() => { spawnPetal("gentle"); if (++n > 34) clearInterval(t); }, 380);
+}
+
+/* ============================================================
+   PART 3 · scene 1 → scene 2
+   ============================================================ */
+$("nextBtn").addEventListener("click", () => {
+  goto($("scene1"), $("scene2"));
+  for (let i = 0; i < 9; i++) spawnPetal("gentle");
+});
+
+/* ============================================================
+   PART 4 · the seal breaks → flowers fall → the letter unfolds
+   ============================================================ */
+const seal = $("seal");
+let sealOpened = false;
+
+seal.addEventListener("click", () => {
+  if (sealOpened) return;
+  sealOpened = true;
+  seal.classList.add("opened");
+  startFlowerRain();
+
+  setTimeout(() => {
+    goto($("scene2"), $("scene3"));
+    requestAnimationFrame(() => $("letter").classList.add("unfold"));
+    setTimeout(() => $("letterWrap").classList.add("ready"), 1200);
+    setTimeout(() => {
+      const inner = $("letterInner");
+      inner.scrollTop = 0;
+      inner.addEventListener("scroll", () => {
+        if (inner.scrollTop > 30) $("scrollHint").classList.add("gone");
+      }, { once:true });
+    }, 900);
+  }, 760);
+});
+
+/* ============================================================
+   PART 5 · scene 3 → scene 4
+   ============================================================ */
+$("toAsk").addEventListener("click", () => {
+  goto($("scene3"), $("scene4"));
+  for (let i = 0; i < 6; i++) spawnPetal("burst");
+});
+
+/* ============================================================
+   PART 6 · the No button that can never be caught
+   Keeps the original wiring (mouseover + click → moveButton)
+   but jumps between spread-out anchor spots inside the box,
+   never near "Yes" and never off-screen.
+   ============================================================ */
+const questionContainer = $("questionContainer");
+const noBtn  = $("noButton");
+const yesBtn = $("yesButton");
+const askNote = $("askNote");
+
+const NO_LABELS = ["No","No 🥺","No… please?","No 🙏","hmm… No?","No 😢","No? still?","No 🙈","No 😌","No 🥺❤️"];
+const NOTES = [
+  "",
+  "Ammulubaby… 🥺",
+  "“No” button escape avutunnadi — adi kuda “Yes” ani cheptondi. ❤️",
+  "Chudu… “No” kuda ninnu odhileyadam ledu. 🥺❤️",
+  "Sare… nuv “Yes” ani cheppeyyi. Naku 15 days chalu. ❤️"
+];
+
+let dodges = 0;
+let lastPos = null;
+
+function shuffle(a){ for (let i = a.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+function moveButton(){
+  const cw = questionContainer.offsetWidth;
+  const ch = questionContainer.offsetHeight;
+  const bw = noBtn.offsetWidth  || 92;
+  const bh = noBtn.offsetHeight || 54;
+
+  const padX = 8, padY = 8;
+  const maxX = Math.max(padX, cw - bw - padX);
+  const maxY = Math.max(padY, ch - bh - padY);
+  const yesCx = cw/2, yesCy = ch/2;
+
+  /* eight spread-out resting spots: 4 corners + 4 edge midpoints */
+  const anchors = [
+    [padX, padY],
+    [maxX, padY],
+    [padX, maxY],
+    [maxX, maxY],
+    [(cw-bw)/2, padY],
+    [(cw-bw)/2, maxY],
+    [padX, (ch-bh)/2],
+    [maxX, (ch-bh)/2]
+  ];
+  shuffle(anchors);
+
+  let best = null, fallback = null;
+  for (const [ax, ay] of anchors){
+    const x = Math.min(maxX, Math.max(padX, ax + (Math.random()*18 - 9)));
+    const y = Math.min(maxY, Math.max(padY, ay + (Math.random()*18 - 9)));
+    const fromYes  = Math.hypot(x + bw/2 - yesCx, y + bh/2 - yesCy);
+    const fromPrev = lastPos ? Math.hypot(x - lastPos.x, y - lastPos.y) : 999;
+    if (fromYes >= 116 && fromPrev >= 64){ best = [x, y]; break; }
+    if (fromYes >= 100 && !fallback) fallback = [x, y];
+  }
+  const [x, y] = best || fallback || [
+    padX + Math.random()*Math.max(1, maxX-padX),
+    padY + Math.random()*Math.max(1, maxY-padY)
+  ];
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
+  lastPos = { x, y };
+
+  dodges++;
+  const labelIdx = Math.min(dodges, NO_LABELS.length - 1);
+  noBtn.textContent = NO_LABELS[labelIdx];
+  noBtn.style.fontSize = Math.max(15, 26 - dodges * 0.7) + "px";
+
+  /* and “Yes” grows a little every time — as it should */
+  yesBtn.style.transform = "scale(" + Math.min(1.22, 1 + dodges*0.022) + ")";
+
+  if (askNote) askNote.textContent = NOTES[Math.min(Math.ceil(dodges/2), NOTES.length - 1)];
+}
+
+/* touch screens can't hover — dodge before the tap can land */
+["pointerdown","touchstart","focus"].forEach(evt => {
+  noBtn.addEventListener(evt, (e) => {
+    if (evt !== "focus") e.preventDefault();
+    moveButton();
+  }, { passive:false });
+});
+window.addEventListener("resize", () => { lastPos = null; if (dodges) moveButton(); });
+
+/* ============================================================
+   PART 7 · Yes → heart loader → thank you
+   (the original snippet's flow, kept intact)
+   ============================================================ */
+const heartLoader = $("heartLoader");
+const resultContainer = $("resultContainer");
+const loaderScene = $("loaderScene");
+
+/* the snippet plays a GIF; we play a heart-rain + the beat instead */
+const gifResult = {
+  el: document.querySelector(".heart-big"),
+  play(){
+    if (this.el) this.el.style.animationPlayState = "running";
+    softHeartRain();
+  }
+};
+
+yesBtn.addEventListener("click", () => {
+  goto($("scene4"), loaderScene);
+
+  const timeoutId = setTimeout(() => {
+    heartLoader.style.display = "none";
+    resultContainer.style.display = "flex";
+    goto(loaderScene, $("scene5"));
+    gifResult.play();
+  }, 3000);
+});
+
+/* ============================================================
+   PART 8 · replay everything
+   ============================================================ */
+$("replayBtn").addEventListener("click", () => {
+  heartLoader.style.display = "grid";
+  resultContainer.style.display = "none";
+
+  dodges = 0;
+  lastPos = null;
+  noBtn.textContent = "No";
+  noBtn.style.fontSize = "";
+  noBtn.style.left = "";
+  noBtn.style.top  = "";
+  yesBtn.style.transform = "";
+  if (askNote) askNote.textContent = "";
+
+  sealOpened = false;
+  seal.classList.remove("opened");
+  $("letter").classList.remove("unfold");
+  $("letterWrap").classList.remove("ready");
+  $("letterInner").scrollTop = 0;
+  $("scrollHint").classList.remove("gone");
+
+  goto($("scene5"), $("scene1"));
+});
+
+/* ============================================================
+   PART 9 · a tiny heart wherever she touches
+   ============================================================ */
+document.addEventListener("pointerdown", (e) => {
+  const h = document.createElement("div");
+  h.className = "tap-heart";
+  h.textContent = Math.random() < .5 ? "❤️" : "🌸";
+  h.style.left = e.clientX + "px";
+  h.style.top  = e.clientY + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 900);
+});
+</script>
+</body>
+</html>
